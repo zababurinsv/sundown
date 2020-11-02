@@ -1,0 +1,44 @@
+#!/bin/bash
+make  -f Makefile.PHONY.wasi  clean
+
+#FLAGS="-Os -g4 \
+#-s FORCE_FILESYSTEM=1 \
+#-lidbfs.js \
+#-s USE_ZLIB=1 \
+#--source-map-base http://127.0.0.1:8887/ \
+#--preload-file package.json@/package.json \
+#-s ASYNCIFY=1 \
+#-s INVOKE_RUN=0 \
+#-s NO_EXIT_RUNTIME=1 \
+#-s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','callMain'] \
+#"
+
+#source map -g4 --source-map-base http://127.0.0.1:8887/ \
+
+emcc -Os  main.c -o index.html \
+ -s FORCE_FILESYSTEM=1 \
+ -lidbfs.js \
+ -s INVOKE_RUN=1 \
+ -s FORCE_FILESYSTEM=1 \
+ --preload-file package.json@/package.json \
+ -s ASYNCIFY=1 \
+ -s USE_ZLIB=1
+
+
+#FLAGS="-Os -g4 \
+#-s FORCE_FILESYSTEM=1 \
+#-lidbfs.js \
+#-s USE_ZLIB=1 \
+#--source-map-base http://127.0.0.1:8887/ \
+#--preload-file package.json@/package.json \
+#-s ASYNCIFY=1 \
+#-s INVOKE_RUN=0 \
+#-s NO_EXIT_RUNTIME=1 \
+#-s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','callMain'] \
+#"
+
+#emmake make \
+#LDFLAGS_native="$FLAGS" \
+#CC_native=emcc  \
+#EXE_native=index.html \
+#CFLAGS_native="$FLAGS"
