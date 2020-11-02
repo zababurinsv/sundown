@@ -1,0 +1,35 @@
+<style>.col { width: 25%; float: left; }</style>
+<div>
+    <div class="col">
+        <textarea id="markdown" cols=40 rows=20>
+## Title
+This is a **Markdown** *converter*, compiled from C to `WebAssembly`
+        </textarea>
+    </div>
+    <div class="col" id="html"></div>
+    <pre class="col" id="htmlstr"></pre>
+</div>
+
+<script>
+    var output = [];
+    var Module = {
+        onRuntimeInitialized: updateUI,
+        print: d => output.push(d)               // reroute stdout to an array
+    }
+
+    function markdownToHTML(markdown) {
+        output = [];
+        FS.writeFile("/tmp/data.md", markdown);  // store the input in a file
+        Module.callMain(["/tmp/data.md"]);       // run the conversion on that file
+        return output;
+    }
+
+    function updateUI() {
+        let output = markdownToHTML(document.getElementById("markdown").value);
+        document.getElementById("html").innerHTML = output.join(" ");
+        document.getElementById("htmlstr").innerText = output.join("\n");
+    }
+
+    document.addEventListener("input", updateUI);
+</script>
+<script src="index.js"></script>

@@ -15,16 +15,16 @@ make  -f Makefile.PHONY.wasi  clean
 
 #source map -g4 --source-map-base http://127.0.0.1:8887/ \
 
-emcc -Os  main.c -o index.html \
- -s FORCE_FILESYSTEM=1 \
- -lidbfs.js \
- -s INVOKE_RUN=1 \
- -s FORCE_FILESYSTEM=1 \
- --preload-file package.json@/package.json \
- -s ASYNCIFY=1 \
- -s USE_ZLIB=1
-
-
+#emcc -Os  main.c -o index.html \
+# -s FORCE_FILESYSTEM=1 \
+# -lidbfs.js \
+# -s INVOKE_RUN=1 \
+# -s FORCE_FILESYSTEM=1 \
+# --preload-file package.json@/package.json \
+# -s ASYNCIFY=1 \
+# -s USE_ZLIB=1
+#
+#
 #FLAGS="-Os -g4 \
 #-s FORCE_FILESYSTEM=1 \
 #-lidbfs.js \
@@ -42,3 +42,11 @@ emcc -Os  main.c -o index.html \
 #CC_native=emcc  \
 #EXE_native=index.html \
 #CFLAGS_native="$FLAGS"
+
+emmake make CC=emcc
+
+sed -i 's/-Werror//g' Makefile
+sed -i 's/-Wemcc//g' Makefile
+
+cp sundown sundown.o
+emcc -o sundown.html sundown.o -s EXTRA_EXPORTED_RUNTIME_METHODS="['callMain']" -s INVOKE_RUN=0
